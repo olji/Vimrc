@@ -1,3 +1,15 @@
 git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-vim -c "PluginInstall | gall"
-rm -rf install
+
+if [ -f ~/.vimrc ]
+then
+    while true; do
+        read -p "~/.vimrc exists and will be overwritten, want to backup? [y/n]" yn
+        case $yn in
+            [Yy]* ) mv ~/.vimrc ~/.vimrc.old; echo "Old ~/.vimrc renamed to ~/.vimrc.old"; break;;
+            [Nn]* ) rm -f ~/.vimrc; echo "~/.vimrc removed"; break;;
+        esac
+    done
+fi
+touch ~/.vimrc
+echo "runtime vimrc" >> ~/.vimrc
+vim +PluginInstall +quitall

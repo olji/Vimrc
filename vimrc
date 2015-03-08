@@ -42,7 +42,7 @@ filetype plugin indent on
 " Colors and Font {{{
 syntax enable " Turn on syntax highlighting
 
-colorscheme wombat " Sets colorscheme
+silent! colorscheme wombat " Sets colorscheme
 
 if has('gui_running')
     if has("win32")
