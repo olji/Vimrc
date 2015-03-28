@@ -5,6 +5,5 @@
 !.gitignore
 !vimrc
 !install
-!fonts/*.ttf
 !colors/pink.vim
 
