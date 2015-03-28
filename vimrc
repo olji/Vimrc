@@ -115,8 +115,8 @@ command! W :w " :W will work as :w
 :command! Nerd :NERDTreeToggle " Open NERDTree, so big
 :command! Tbar :TagbarToggle " Open tab bar , so cool
 :command! Undo :UndotreeToggle " Open Undotree, so nice
-:command! Vimrc :e $MYVIMRC " Open .vimrc with a command, so much
-:command! Source :source $MYVIMRC " Source .vimrc upon writing
+:command! Vimrc :e $HOME/.vim/vimrc " Open .vimrc with a command, so much
+:command! Source :source $HOME/.vim/vimrc " Source .vimrc upon writing
 :command! Emacs :!cowsay -f /usr/share/cowsay/cows/sodomized-sheep.cow "y u do dis emacs"
 " }}}
 " Leader Commands {{{
