@@ -204,6 +204,7 @@ nnoremap gV `[v`]
 " Expand the window so it isn't some small shit on startup
 if has("gui_running")
     if has("unix")
+        set lines=999 columns=999
     elseif has("win32")
         au GUIEnter * simalt ~x
     endif
