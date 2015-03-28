@@ -13,5 +13,5 @@ fi
 touch ~/.vimrc
 echo "runtime vimrc" >> ~/.vimrc
 mkdir -p ~/.fonts/sourceCodePro/
-mv fonts/* ~/.fonts/sourceCodePro/
+mv ~/.vim/fonts/* ~/.fonts/sourceCodePro/
 vim +PluginInstall +quitall
