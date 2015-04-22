@@ -1,7 +1,10 @@
-git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+if [ -d ~/.vim/bundle/Vundle.vim ]; then
+    echo "Vundle seems to already be installed, if it's not run 'git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim'"
+else
+    git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+fi
 
-if [ -f ~/.vimrc ]
-then
+if [ -f ~/.vimrc ]; then
     while true; do
         read -p "~/.vimrc exists and will be overwritten, want to backup? [y/n]" yn
         case $yn in
