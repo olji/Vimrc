@@ -42,7 +42,7 @@ filetype plugin indent on
 " Colors and Font {{{
 syntax enable " Turn on syntax highlighting
 
-silent! colorscheme wombat " Sets colorscheme
+silent! colorscheme molokai " Sets colorscheme
 
 if has('gui_running')
     if has("win32")
@@ -215,7 +215,9 @@ endif
 au Filetype make set noexpandtab " Turn of expandtab when in makefiles
 au Filetype vim set foldmethod=marker " Use different fold method for vimrc
 au Filetype vim set foldlevel=0 " Start with everything folded in vimrc
-au Filetype tex colorscheme molokai
+au Filetype tex set linebreak " Don't linebreak in the middle of a word, only certain characters (Can be configured IIRC)
+au Filetype tex set nowrap " Don't wrap across lines, break the line instead, tex doesn't care if there's only one linebreak
+au Filetype tex set tw=150 " Don't let a line exceed 150 characters
 " }}}
 " Eventual functionality restoration {{{
 set backspace=2 " Forces backspace to function as normal
