@@ -16,24 +16,14 @@ endif
 
 Plugin 'gmarik/Vundle.vim'
 
-Plugin 'wombat'
-Plugin 'solarized'
-Plugin 'molokai'
-Plugin 'monokai'
-Plugin 'hexHighlight.vim'
-Plugin 'tabular'
-
-Plugin 'shawncplus/Vim-toCterm'
+Plugin 'nanotech/jellybeans.vim'
 Plugin 'itchyny/lightline.vim'
-Plugin 'scrooloose/syntastic'
 Plugin 'scrooloose/nerdtree'
 Plugin 'mbbill/undotree'
 Plugin 'majutsushi/tagbar'
 Plugin 'tpope/vim-fugitive'
-Plugin 'yggdroot/indentline'
 Plugin 'jlanzarotta/bufexplorer'
 Plugin 'fholgado/minibufexpl.vim'
-Plugin 'wesQ3/vim-windowswap'
 
 call vundle#end()
 " }}}
@@ -42,7 +32,7 @@ filetype plugin indent on
 " Colors and Font {{{
 syntax enable " Turn on syntax highlighting
 
-silent! colorscheme molokai " Sets colorscheme
+silent! colorscheme jellybeans " Sets colorscheme
 
 if has('gui_running')
     if has("win32")
