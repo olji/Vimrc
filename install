@@ -1,5 +1,5 @@
 if [ -d ~/.vim/bundle/Vundle.vim ]; then
-    echo "Vundle seems to already be installed, if it's not run 'git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim'"
+    echo "Vundle seems to already be installed, if it's not run 'git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim' manually"
 else
     git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 fi
@@ -16,7 +16,7 @@ fi
 touch ~/.vimrc
 echo "runtime vimrc" >> ~/.vimrc
 mkdir -p ~/.fonts/sourceCodePro/
-mv ~/.vim/fonts/* ~/.fonts/sourceCodePro/
+mv fonts/* ~/.vim/fonts/*
 if [ ! -f ~/.vim/vimrc ]
 then
     mv vimrc ~/.vim/vimrc;
