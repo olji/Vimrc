@@ -16,7 +16,7 @@ endif
 
 Plugin 'gmarik/Vundle.vim'
 
-Plugin 'nanotech/jellybeans.vim'
+Plugin 'morhetz/gruvbox'
 Plugin 'itchyny/lightline.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'mbbill/undotree'
@@ -32,7 +32,7 @@ filetype plugin indent on
 " Colors and Font {{{
 syntax enable " Turn on syntax highlighting
 
-silent! colorscheme jellybeans " Sets colorscheme
+silent! colorscheme gruvbox " Sets colorscheme
 
 if has('gui_running')
     if has("win32")
