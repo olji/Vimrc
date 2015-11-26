@@ -16,7 +16,7 @@ fi
 touch ~/.vimrc
 echo "runtime vimrc" >> ~/.vimrc
 mkdir -p ~/.fonts/sourceCodePro/
-mv fonts/* ~/.vim/fonts/
+cp fonts/* ~/.vim/fonts/
 if [ ! -f ~/.vim/vimrc ]
 then
     cp vimrc ~/.vim/vimrc;
