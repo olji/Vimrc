@@ -5,6 +5,7 @@ set nocompatible " Should be disabled upon finding ~/.vimrc, but better safe tha
 filetype off " Disable for Vundle
 " Vundle & Plugins {{{
 
+" Setup vundle for most operating systems
 if has("unix")
     set rtp+=~/.vim/bundle/Vundle.vim
     call vundle#begin()
@@ -14,16 +15,19 @@ elseif has("win32")
     call vundle#begin(path)
 endif
 
+
 Plugin 'gmarik/Vundle.vim'
 
+Plugin 'VisIncr' " Generate incremented numbers from V-Block selections using :I# (dec), :IO# (oct), :IX# (hex)or similar, all commands can be found on sourceforge page.
+Plugin 'Scrooloose/nerdcommenter' " Comment marked blocks using <leader>cs, uncomment with <leader>cu. (Other options than <leader>cs exists, found on github page.)
 Plugin 'morhetz/gruvbox'
 Plugin 'itchyny/lightline.vim'
-Plugin 'scrooloose/nerdtree'
-Plugin 'mbbill/undotree'
-Plugin 'majutsushi/tagbar'
-Plugin 'tpope/vim-fugitive'
-Plugin 'jlanzarotta/bufexplorer'
-Plugin 'fholgado/minibufexpl.vim'
+Plugin 'scrooloose/nerdtree' " Directory tree, open with :Nerd or Ctrl+n
+Plugin 'mbbill/undotree' " Visualisation of the undo tree, open with :Undo
+Plugin 'majutsushi/tagbar' " Class outline viewer, open with :Tagbar
+Plugin 'tpope/vim-fugitive' " Git wrapper.
+Plugin 'jlanzarotta/bufexplorer' " Dependency for minibufexpl
+Plugin 'fholgado/minibufexpl.vim' " Shows buffers in a split at the top of the window.
 
 call vundle#end()
 " }}}
@@ -34,12 +38,10 @@ syntax enable " Turn on syntax highlighting
 
 silent! colorscheme gruvbox " Sets colorscheme
 
-if has('gui_running')
-    if has("win32")
-        set guifont=consolas:h12 " Change to your liking
-    elseif has("unix")
-        set guifont=Source\ Code\ Pro\ Medium\ 10 " Change to your liking
-    endif
+if has("win32")
+    set guifont=consolas:h12 " Change to your liking
+elseif has("unix")
+    set guifont=Source\ Code\ Pro\ Medium\ 10 " Change to your liking
 endif
 
 set background=dark " Sets background to be dark (noshitsherlock)
@@ -57,29 +59,22 @@ set shiftwidth=4 " Make an indent be 4 spaces
 set softtabstop=4 " Remove 4 spaces in sequence if found while backspacing
 set tabstop=4 " Set a tab to be 4 spaces large
 
-" Tab can be used anywhere on line to change indent
+" Tab can be used anywhere on line to properly indent
 nnoremap <tab> ==
+" Properly indent whole file using Shift+Tab
 nnoremap <S-tab> gg=G
 " }}}
 " Plugin settings {{{
 filetype plugin on
 let g:NERDTreeWinPos="right" " Align NERDTree to the right
-let g:syntastic_cpp_compiler = 'g++' " Set cpp compiler for syntastic to use
-let g:syntastic_cpp_compiler_options = '-std=c++11 -Wall -Wextra -pedantic'
 " }}}
 " Text/File Navigation {{{
 "
-set nu
+set nu " Enable line numbers
 set relativenumber " Have line numbers relative to your position
 set showmatch " Show opening and closing braces
 set wildmenu " Tab completion will show what other files there are
 set wrap " Wrap visually but not in buffer
-
-au FocusLost * silent! :set nornu " Disable relative number when unfocused
-au FocusGained * silent! :set rnu " Enable relative number when focused
-
-autocmd StdinReadPre * let  s:std_in=1
-autocmd vimenter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 autocmd InsertEnter * silent! :set nornu " Disable relative number when in insert mode
 autocmd InsertLeave * silent! :set rnu " Enable relative number when in any other
@@ -90,14 +85,12 @@ map <C-l> <C-w>l
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 
-" Easier line navigation
-nnoremap B 0
-nnoremap E $
 " }}}
 " Normal Commands {{{
 command! W :w " :W will work as :w
 
-:command! Hex :call HexHighlight()
+" Bind Ctrl+n to toggle nerdtree
+map <C-n> :NERDTreeToggle<CR>
 :command! Syntax :call <SID>SynStack() " Find syntax group
 :command! SaveSession :call SaveVimSession() " Save session manually
 :command! LoadSession :call LoadVimSession() " Load session manually
@@ -107,11 +100,13 @@ command! W :w " :W will work as :w
 :command! Undo :UndotreeToggle " Open Undotree, so nice
 :command! Vimrc :e $HOME/.vim/vimrc " Open .vimrc with a command, so much
 :command! Source :source $HOME/.vim/vimrc " Source .vimrc upon writing
-:command! Emacs :!cowsay -f /usr/share/cowsay/cows/sodomized-sheep.cow "y u do dis emacs"
 " }}}
 " Leader Commands {{{
 let mapleader = "," " Rebind leader to be comma
 
+" <leader>cc -- Comment line/selection
+" <leader>cs -- Comment line/selection 'sexily'
+" <leader>cu -- Uncomment line
 " Call :noh upon hitting <leader> + space, removing highlighting from search
 nnoremap <leader><space> :noh<CR>
 " }}}
@@ -160,8 +155,8 @@ set incsearch " Search while entering word
 " }}}
 " Folding {{{
 set foldenable " Enable folding
-set foldlevelstart=10 " Open most folds upon start
-set foldmethod=indent " Fold based on indentation
+set foldlevelstart=0 " Have all folds closed at the start
+set foldmethod=marker " Fold based on markers ({{{ Fold }}})
 set foldnestmax=0 " Maximum of 10 nested folds
 
 " Use space to toggle folds
@@ -170,46 +165,29 @@ nnoremap <space> za
 " Quality of Life {{{
 set cursorline " Make current line stand out
 set guioptions=i " Remove toolbar on top, preserve icon in alt-tab
-set laststatus=2
+set laststatus=2 " Always show statusline
 set lazyredraw " Redraw only when needed
 set nobackup
-set noshowmode " Dont show which mode is active, lightline does that
 set noswapfile
+set noshowmode " Dont show which mode is active, lightline does that
 set nowritebackup " Turn off if vim crashes often
 set showcmd " Show the command being entered
 set nolist " List fucks wrapping up, so lets disable it
 
-" Increase vertical size of split (window)
-map <UP> :winc+<CR>
-" Decrease vertical size of split (window)
-map <DOWN> :winc-<CR>
-" Increase horizontal size of split (window)
-map <LEFT> :winc<<CR>
-" Decrease horizontal size of split (window)
-map <RIGHT> :winc><CR>
-
 " Highlight last inserted text
 nnoremap gV `[v`]
-
-" Expand the window so it isn't some small shit on startup
-if has("gui_running")
-    if has("unix")
-        set lines=999 columns=999
-    elseif has("win32")
-        au GUIEnter * simalt ~x
-    endif
-endif
-
 " }}}
 " File settings {{{
 au Filetype make set noexpandtab " Turn of expandtab when in makefiles
 au Filetype vim set foldmethod=marker " Use different fold method for vimrc
 au Filetype vim set foldlevel=0 " Start with everything folded in vimrc
 au Filetype tex set linebreak " Don't linebreak in the middle of a word, only certain characters (Can be configured IIRC)
-au Filetype tex set nowrap " Don't wrap across lines, break the line instead, tex doesn't care if there's only one linebreak
-au Filetype tex set tw=150 " Don't let a line exceed 150 characters
+au Filetype tex set nowrap " Don't wrap across lines, break the line instead, tex doesn't care if there's only one linebreak, large wrapped lines creates lag when scrolling using j/k
+au Filetype tex set tw=65 " Don't let a line exceed 150 characters
 " }}}
 " Eventual functionality restoration {{{
+" Backspace lost functionality an a windows machine, these lines solved it.
+" They are not needed if that problem doesn't exist, but they doesn't hurt.
 set backspace=2 " Forces backspace to function as normal
 set backspace=indent,eol,start " Allows backspacing across indents, end of lines and start of insertion
 " }}}
