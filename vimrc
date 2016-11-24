@@ -25,7 +25,7 @@ Plugin 'itchyny/lightline.vim'
 Plugin 'scrooloose/nerdtree' " Directory tree, open with :Nerd or Ctrl+n
 Plugin 'mbbill/undotree' " Visualisation of the undo tree, open with :Undo
 Plugin 'majutsushi/tagbar' " Class outline viewer, open with :Tagbar
-Plugin 'tpope/vim-fugitive' " Git wrapper.
+Plugin 'jreybert/vimagit' " Git wrapper similar to Magit for emacs.
 Plugin 'jlanzarotta/bufexplorer' " Dependency for minibufexpl
 Plugin 'fholgado/minibufexpl.vim' " Shows buffers in a split at the top of the window.
 
@@ -41,7 +41,7 @@ silent! colorscheme gruvbox " Sets colorscheme
 if has("win32")
     set guifont=consolas:h12 " Change to your liking
 elseif has("unix")
-    set guifont=Source\ Code\ Pro\ Medium\ 10 " Change to your liking
+    set guifont=Hack\ 10 " Change to your liking
 endif
 
 set background=dark " Sets background to be dark (noshitsherlock)
@@ -67,6 +67,7 @@ nnoremap <S-tab> gg=G
 " Plugin settings {{{
 filetype plugin on
 let g:NERDTreeWinPos="right" " Align NERDTree to the right
+let g:instant_markdown_autostart = 0
 " }}}
 " Text/File Navigation {{{
 "
@@ -109,6 +110,9 @@ let mapleader = "," " Rebind leader to be comma
 " <leader>cu -- Uncomment line
 " Call :noh upon hitting <leader> + space, removing highlighting from search
 nnoremap <leader><space> :noh<CR>
+nnoremap <leader>n :NERDTreeToggle<CR>
+nnoremap <leader>t :TagbarToggle<CR>
+nnoremap <leader>g :Magit<CR>
 " }}}
 " Functions {{{
 function! <SID>SynStack()
@@ -172,7 +176,10 @@ set noswapfile
 set noshowmode " Dont show which mode is active, lightline does that
 set nowritebackup " Turn off if vim crashes often
 set showcmd " Show the command being entered
-set nolist " List fucks wrapping up, so lets disable it
+
+" Set some character representations
+set list
+set listchars=eol:$,tab:>-,trail:~
 
 " Highlight last inserted text
 nnoremap gV `[v`]
@@ -182,6 +189,7 @@ au Filetype make set noexpandtab " Turn of expandtab when in makefiles
 au Filetype vim set foldmethod=marker " Use different fold method for vimrc
 au Filetype vim set foldlevel=0 " Start with everything folded in vimrc
 au Filetype tex set linebreak " Don't linebreak in the middle of a word, only certain characters (Can be configured IIRC)
+au Filetype tex set nolist " tex files still need nolist for proper linebreaks
 au Filetype tex set nowrap " Don't wrap across lines, break the line instead, tex doesn't care if there's only one linebreak, large wrapped lines creates lag when scrolling using j/k
 au Filetype tex set tw=65 " Don't let a line exceed 150 characters
 " }}}
