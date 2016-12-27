@@ -18,16 +18,24 @@ endif
 
 Plugin 'gmarik/Vundle.vim'
 
-Plugin 'VisIncr' " Generate incremented numbers from V-Block selections using :I# (dec), :IO# (oct), :IX# (hex)or similar, all commands can be found on sourceforge page.
-Plugin 'Scrooloose/nerdcommenter' " Comment marked blocks using <leader>cs, uncomment with <leader>cu. (Other options than <leader>cs exists, found on github page.)
+Plugin 'AutoComplPop' " Nice wrapper to OmniComplete
+Plugin 'Scrooloose/nerdcommenter' " Quick commenting
 Plugin 'morhetz/gruvbox'
 Plugin 'itchyny/lightline.vim'
 Plugin 'scrooloose/nerdtree' " Directory tree, open with :Nerd or Ctrl+n
-Plugin 'mbbill/undotree' " Visualisation of the undo tree, open with :Undo
-Plugin 'majutsushi/tagbar' " Class outline viewer, open with :Tagbar
-Plugin 'jreybert/vimagit' " Git wrapper similar to Magit for emacs.
-Plugin 'jlanzarotta/bufexplorer' " Dependency for minibufexpl
-Plugin 'fholgado/minibufexpl.vim' " Shows buffers in a split at the top of the window.
+Plugin 'mbbill/undotree' " Visualisation of the undo tree
+Plugin 'majutsushi/tagbar' " File content viewer
+Plugin 'jreybert/vimagit' " Git wrapper similar to Magit for emacs,
+                          " really nice for staging small sections
+Plugin 'tpope/vim-fugitive' " Another git wrapper, much nicer in other aspects
+Plugin 'jlanzarotta/bufexplorer' " Practically :buffers with sorting
+Plugin 'fholgado/minibufexpl.vim' " Simple overhead of buffer numbers
+Plugin 'raimondi/delimitMate'  " autoclose delimiters, smart closing of delimiters
+Plugin 'justincampbell/vim-eighties' " Automatically resize active window
+Plugin 'a.vim' " Toggle between source and header files in c and c++
+Plugin 'suan/vim-instant-markdown' " Vim plugin for use together with
+                                   " instant-markdown, great for writing markdown files
+Plugin 'airblade/vim-gitgutter' " Show git diff on sign column, stage individual hunks
 
 call vundle#end()
 " }}}
@@ -58,16 +66,13 @@ set expandtab " Make a tab be spaces
 set shiftwidth=4 " Make an indent be 4 spaces
 set softtabstop=4 " Remove 4 spaces in sequence if found while backspacing
 set tabstop=4 " Set a tab to be 4 spaces large
-
-" Tab can be used anywhere on line to properly indent
-nnoremap <tab> ==
-" Properly indent whole file using Shift+Tab
-nnoremap <S-tab> gg=G
 " }}}
 " Plugin settings {{{
 filetype plugin on
 let g:NERDTreeWinPos="right" " Align NERDTree to the right
-let g:instant_markdown_autostart = 0
+let g:instant_markdown_autostart = 0 " Start instant-markdown manually
+let delimitMate_expand_cr = 1 " Make i{<CR> equivalent to i{<CR>}<ESC>O
+
 " }}}
 " Text/File Navigation {{{
 "
@@ -79,40 +84,65 @@ set wrap " Wrap visually but not in buffer
 
 autocmd InsertEnter * silent! :set nornu " Disable relative number when in insert mode
 autocmd InsertLeave * silent! :set rnu " Enable relative number when in any other
+" }}}
+" Keybinds {{{
 
+let mapleader = "\\" " Ensure leader is hack
+" Map space to leader through hack, making hack show in showcmd when entering
+" leader command
+map <space> \
+
+" Toggle folds
+nnoremap <leader>.  za
+" Remove highlight from previous search
+nnoremap <leader>, :noh<CR>
+" Toggle NERDTree
+nnoremap <leader>n :NERDTreeToggle<CR>
+" Toggle Tagbar
+nnoremap <leader>tb :TagbarToggle<CR>
+" Toggle vim-magit
+nnoremap <leader>g :Magit<CR>
+" Open COMMIT_MSG through vim-fugutive
+nnoremap <leader>c :Gcommit<CR>
+" Push through vim-fugutive
+nnoremap <leader>p :Gpush<CR>
+" Pull through vim-fugutive
+nnoremap <leader>P :Gpull<CR>
+" Toggle highlights on gitgutter
+nnoremap <leader>tg :GitGutterLineHighlightsToggle<CR>
+" Common A commands bound to leader
+nnoremap <leader>aa :A<CR>
+nnoremap <leader>as :AS<CR>
+nnoremap <leader>av :AV<CR>
+
+" Move current line up or down using arrow keys
+nnoremap <up> ddkP
+nnoremap <down> ddp
+" Tab can be used anywhere on line to properly indent
+nnoremap <tab> ==
+" Properly indent whole file using Shift+Tab
+nnoremap <S-tab> gg=G
+" Bind Ctrl+n to toggle NERDTreeToggle
+nnoremap <C-n> :NERDTreeToggle<CR>
 " Move in windows with C-<dir> instead of C-w <dir>
-map <C-h> <C-w>h  
-map <C-l> <C-w>l
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+" Highlight last inserted text
+nnoremap gV `[v`]
 " }}}
 " Normal Commands {{{
 command! W :w " :W will work as :w
 
-" Bind Ctrl+n to toggle nerdtree
-map <C-n> :NERDTreeToggle<CR>
-:command! Syntax :call <SID>SynStack() " Find syntax group
-:command! SaveSession :call SaveVimSession() " Save session manually
 :command! LoadSession :call LoadVimSession() " Load session manually
-:command! All :args **/*.cpp | :args **/*.hpp
-:command! Nerd :NERDTreeToggle " Open NERDTree, so big
-:command! Tbar :TagbarToggle " Open tab bar , so cool
-:command! Undo :UndotreeToggle " Open Undotree, so nice
-:command! Vimrc :e $HOME/.vim/vimrc " Open .vimrc with a command, so much
+:command! Nerd :NERDTreeToggle " Open NERDTree.
+:command! SaveSession :call SaveVimSession() " Save session manually
 :command! Source :source $HOME/.vim/vimrc " Source .vimrc upon writing
-" }}}
-" Leader Commands {{{
-let mapleader = "," " Rebind leader to be comma
-
-" <leader>cc -- Comment line/selection
-" <leader>cs -- Comment line/selection 'sexily'
-" <leader>cu -- Uncomment line
-" Call :noh upon hitting <leader> + space, removing highlighting from search
-nnoremap <leader><space> :noh<CR>
-nnoremap <leader>n :NERDTreeToggle<CR>
-nnoremap <leader>t :TagbarToggle<CR>
-nnoremap <leader>g :Magit<CR>
+:command! Syntax :call <SID>SynStack() " Find syntax group
+:command! Tbar :TagbarToggle " Open tab bar
+:command! Vimrc :e $HOME/.vim/vimrc " Open .vimrc with a command
+:command! Undo :UndotreeToggle " Open Undotree
 " }}}
 " Functions {{{
 function! <SID>SynStack()
@@ -161,37 +191,41 @@ set incsearch " Search while entering word
 set foldenable " Enable folding
 set foldlevelstart=0 " Have all folds closed at the start
 set foldmethod=marker " Fold based on markers ({{{ Fold }}})
-set foldnestmax=0 " Maximum of 10 nested folds
-
-" Use space to toggle folds
-nnoremap <space> za
+set foldnestmax=0 " Maximum amount of nested folds
 " }}}
 " Quality of Life {{{
 set cursorline " Make current line stand out
 set guioptions=i " Remove toolbar on top, preserve icon in alt-tab
 set laststatus=2 " Always show statusline
 set lazyredraw " Redraw only when needed
+set noshowmode " Dont show which mode is active, lightline does that
+set showcmd " Show the command being entered
+
+set nowritebackup " Turn off if vim crashes often
 set nobackup
 set noswapfile
-set noshowmode " Dont show which mode is active, lightline does that
-set nowritebackup " Turn off if vim crashes often
-set showcmd " Show the command being entered
 
 " Set some character representations
 set list
 set listchars=eol:$,tab:>-,trail:~
 
-" Highlight last inserted text
-nnoremap gV `[v`]
+" Disable Nul/C-Space, making entering C-Space harmless
+" Both are good to have as different terminal emulators
+" can apparently send the combination differently
+imap <Nul> <Nop>
+imap <C-Space> <Nop>
 " }}}
 " File settings {{{
-au Filetype make set noexpandtab " Turn of expandtab when in makefiles
-au Filetype vim set foldmethod=marker " Use different fold method for vimrc
-au Filetype vim set foldlevel=0 " Start with everything folded in vimrc
-au Filetype tex set linebreak " Don't linebreak in the middle of a word, only certain characters (Can be configured IIRC)
-au Filetype tex set nolist " tex files still need nolist for proper linebreaks
-au Filetype tex set nowrap " Don't wrap across lines, break the line instead, tex doesn't care if there's only one linebreak, large wrapped lines creates lag when scrolling using j/k
-au Filetype tex set tw=65 " Don't let a line exceed 150 characters
+au Filetype c setlocal keywordprg=cppman " Use cppman in c files
+au Filetype cpp setlocal keywordprg=cppman " Use cppman in c++ files
+au Filetype make setlocal noexpandtab " Turn of expandtab when in makefiles
+au Filetype vim setlocal foldmethod=marker " Use different fold method for vimrc
+au Filetype vim setlocal foldlevel=0 " Start with everything folded in vimrc
+au Filetype tex setlocal linebreak " Don't linebreak in the middle of a word, only certain characters (Can be configured IIRC)
+au Filetype tex setlocal nolist " tex files still need nolist for proper linebreaks
+au Filetype tex setlocal nowrap " Don't wrap across lines, break the line instead, tex doesn't care if there's only one linebreak, large wrapped lines creates lag when scrolling using j/k
+au Filetype tex setlocal tw=65 " Don't let a line exceed 150 characters
+au Filetype gnugo setlocal nocursorline
 " }}}
 " Eventual functionality restoration {{{
 " Backspace lost functionality an a windows machine, these lines solved it.
